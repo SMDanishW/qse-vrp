@@ -42,7 +42,7 @@ Repo layout:
   common/   solvers.py (run_qaoa, run_sa), qubo_utils.py (verify_formulation brute-force check, bqm_to_qp), results.py (save/load)
   domains/<supply_chain|vrp|scheduling>/  problem.py, run.py, README.md
   configs/<domain>.yaml   data/   results/   notebooks/   requirements.txt (pinned)
-Every domain's problem.py exposes: load_instance(), build_qubo(instance, penalties) -> QuadraticProgram (convertible to a dimod BQM), decode(sample) -> solution, is_feasible(solution), objective(solution).
+Every domain's problem.py exposes: load_instance(), build_qubo(instance, penalties) -> QuadraticProgram (convertible to a dimod BQM), decode(sample, instance) -> solution, is_feasible(solution), objective(solution).
 - Decode bitstrings by variable name, never by position. Qiskit bitstrings are little-endian (qubit 0 is the rightmost bit).
 - Use fixed seeds for transpiler, simulator, optimizer and annealer, all recorded in the config.
 - Every run saves a JSON result with: domain, instance, n_vars, solver, backend, reps (p), optimizer, maxiter, initial parameters, shots or num_reads, seeds, penalty weights, best bitstring, energy, objective, feasible, probability of the optimal and of any feasible bitstring, runtime, package versions.

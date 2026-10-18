@@ -38,18 +38,20 @@ Precedence when they disagree: the project brief wins on scope and deliverables;
   - TQ3 = practical challenges (circuit depth, parameter tuning, encoding, simulator limits)
 
 ## VRP approach: hybrid "cluster first, route second"
-Instance: 1 depot, 5–6 customers, 2 vehicles, demands, capacity, distance rule (all stated explicitly).
+Instance: QOPTLib `data/vrp/P-n6_1.vrp`: 1 depot, 5 customers, K = 2 vehicles, unit demand, C = 3,
+TSPLIB-rounded EUC_2D distances. Conventions, verdict and reference check: `data/vrp/README.md`.
 
 **Stage 1 — assignment QUBO**
 - `x[i,v] = 1` if customer i is served by vehicle v.
 - Cost: sum of intra-vehicle pairwise distances, $\sum_v \sum_{i<j} d_{ij}\, x_{i,v} x_{j,v}$.
 - Penalties: one vehicle per customer $P_1 \sum_i (\sum_v x_{i,v} - 1)^2$;
-  capacity/balance without slack bits $P_2 \sum_v (\sum_i q_i x_{i,v} - T_v)^2$ (or a count target).
-- Fix one customer to vehicle 0 to break symmetry (6 customers × 2 vehicles = 12 vars → 10 after fixing).
+  capacity without slack bits as a count target $P_2 \sum_v (\sum_i x_{i,v} - 2.5)^2$
+  (equal penalty for loads 2 and 3, larger otherwise, so it encodes C = 3 exactly for 5 customers).
+- Fix customer 1 to vehicle 0 to break symmetry (5 customers × 2 vehicles = 10 vars → 8 after fixing).
 
 **Stage 2 — per-route TSP QUBO**
 - `y[i,t] = 1` if customer i is visited at position t; depot fixed at start and end.
-- m customers → m² vars (3 customers → 9 vars).
+- m customers → m² vars (P-n6_1 routes: 3 customers → 9 vars, 2 customers → 4 vars).
 - Cost: depot→first + consecutive legs + last→depot.
 - Penalties: one position per customer, one customer per position.
 - Stage 1's decoded assignment feeds Stage 2 (one TSP per vehicle).
@@ -85,7 +87,7 @@ Local dev env: `.venv/` (CPython 3.14.3), git-ignored.
 ## problem.py interface (keep exactly)
 - `load_instance(path) -> Instance`
 - `build_qubo(instance, penalties) -> QuadraticProgram` (built as a dimod BQM, converted with `common.qubo_utils.bqm_to_qp`)
-- `decode(sample: dict[str, int]) -> Solution`
+- `decode(sample: dict[str, int], instance) -> Solution` (instance needed for K and capacity; `Solution` carries it)
 - `is_feasible(solution) -> bool`
 - `objective(solution) -> float` (true route cost, without penalties)
 
@@ -120,8 +122,8 @@ probability of the optimal bitstring, probability of any feasible bitstring, run
 1. [x] Environment and pinned `requirements.txt`.
 2. [x] Repo skeleton (layout above).
 3. [x] `common/qubo_utils.py`: `verify_formulation` brute-force check, `bqm_to_qp` conversion (penalties: dimod built-in, no wrapper).
-4. [ ] Dataset/instance decision (verdict vs the 8 criteria in agent-identity.md) and `data/` instance file.
-5. [ ] Stage 1 QUBO derivation (LaTeX) and `domains/vrp/problem.py`, with a brute-force test.
+4. [x] Dataset: QOPTLib VRP, verdict "suitable with assumptions"; instance P-n6_1 (`data/vrp/README.md`).
+5. [x] Stage 1 QUBO: derivation in `domains/vrp/README.md`, `problem.py`, tests (8 vars, P = 162, ground state {1,2,5}/{3,4}).
 6. [ ] `common/solvers.py` (`run_qaoa`, `run_sa`), then `common/results.py`.
 7. [ ] Stage 2 TSP QUBO and Stage 1 → Stage 2 chaining.
 8. [ ] QAOA runs: sweep p, optimizer, maxiter; penalty sweep; full distributions.

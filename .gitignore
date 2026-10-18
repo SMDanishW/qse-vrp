@@ -1,7 +1,7 @@
 # environments
 .venv/
 qsenv/
-
+data/QOPTLib
 # python
 __pycache__/
 *.pyc

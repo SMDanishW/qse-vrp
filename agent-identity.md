@@ -39,7 +39,7 @@ Default to a hybrid "cluster first, route second" decomposition so each quantum 
 
 ## Shared conventions (set by M2, maintained with M4)
 Repo layout:
-  common/   solvers.py (run_qaoa, run_sa), qubo_utils.py (brute-force check, penalty helpers), results.py (save/load)
+  common/   solvers.py (run_qaoa, run_sa), qubo_utils.py (verify_formulation brute-force check, bqm_to_qp), results.py (save/load)
   domains/<supply_chain|vrp|scheduling>/  problem.py, run.py, README.md
   configs/<domain>.yaml   data/   results/   notebooks/   requirements.txt (pinned)
 Every domain's problem.py exposes: load_instance(), build_qubo(instance, penalties) -> QuadraticProgram (convertible to a dimod BQM), decode(sample) -> solution, is_feasible(solution), objective(solution).

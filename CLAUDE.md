@@ -65,7 +65,7 @@ reported as a comparison.
 ## Repo layout
 ```
 common/
-  qubo_utils.py   # brute-force check, penalty helpers (one-hot, squared-target)
+  qubo_utils.py   # verify_formulation (2^n brute-force check), bqm_to_qp; penalties via dimod add_linear_equality_constraint
   solvers.py      # run_qaoa(...), run_sa(...)
   results.py      # save/load result JSON
 domains/vrp/
@@ -84,7 +84,7 @@ Local dev env: `.venv/` (CPython 3.14.3), git-ignored.
 
 ## problem.py interface (keep exactly)
 - `load_instance(path) -> Instance`
-- `build_qubo(instance, penalties) -> QuadraticProgram` (must also convert to a dimod BQM)
+- `build_qubo(instance, penalties) -> QuadraticProgram` (built as a dimod BQM, converted with `common.qubo_utils.bqm_to_qp`)
 - `decode(sample: dict[str, int]) -> Solution`
 - `is_feasible(solution) -> bool`
 - `objective(solution) -> float` (true route cost, without penalties)
@@ -115,6 +115,19 @@ probability of the optimal bitstring, probability of any feasible bitstring, run
   distribution** and the **feasible fraction**, not just the best sample.
 - Document every penalty weight with a short justification; run a small sweep where useful.
 - Keep a running `docs/challenges.md` log (depth, parameter tuning, encoding, simulator limits) for TQ3.
+
+## Status / tasks (tick when done; update this list, not chat)
+1. [x] Environment and pinned `requirements.txt`.
+2. [x] Repo skeleton (layout above).
+3. [x] `common/qubo_utils.py`: `verify_formulation` brute-force check, `bqm_to_qp` conversion (penalties: dimod built-in, no wrapper).
+4. [ ] Dataset/instance decision (verdict vs the 8 criteria in agent-identity.md) and `data/` instance file.
+5. [ ] Stage 1 QUBO derivation (LaTeX) and `domains/vrp/problem.py`, with a brute-force test.
+6. [ ] `common/solvers.py` (`run_qaoa`, `run_sa`), then `common/results.py`.
+7. [ ] Stage 2 TSP QUBO and Stage 1 → Stage 2 chaining.
+8. [ ] QAOA runs: sweep p, optimizer, maxiter; penalty sweep; full distributions.
+9. [ ] `docs/challenges.md` for TQ3, README derivation, report section for M3, slides.
+
+Open items: Python version of the user's `qsenv` env unknown (`.venv` here is 3.14.3).
 
 ## Environment
 - `requirements.txt` is the full pinned `pip freeze` (2026-10-18). It is the single source of truth;

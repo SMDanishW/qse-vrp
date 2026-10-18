@@ -12,7 +12,8 @@ agent-identity.md: the full assistant identity and project context (role, scope 
 `Project instructions/Technical_Project_Group_A.pdf`: the official course project brief. It is the authority on scope, objectives, TQ1–TQ3 and deliverables. Note: it names students; refer to them only by code (M1–M4).
 slides/: the course lecture slides. When explaining a quantum concept or choosing notation, check the slides first and match their terminology and symbols so the report stays consistent with the course. Cite the slide file when an explanation relies on it. Open individual files only when needed.
   The slides cover QSE basics only: QUBO, penalty, ansatz and mixer appear nowhere; QAOA only in passing
-  (`Quantum_Lecture 2.pdf` p16, `Lecture 6.pdf` p43), Ising once (`Lecture 6.pdf` p37). For QUBO/QAOA
+  (QAOA as a hybrid loop: `Quantum_Lecture 2.pdf` p9, p16; Qiskit max-cut example: `Lecture 6.pdf` p43;
+  simulators: `Lecture 6.pdf` p8; shots: `Lecture 3.pdf` p14). The Ising model is never explained. For QUBO/QAOA
   notation use external sources (e.g. Lucas 2014, "Ising formulations of many NP problems"; Qiskit docs) and cite them.
 slides/ and `Project instructions/` are git-ignored (course material; the brief contains real names).
 Precedence when they disagree: the project brief wins on scope and deliverables; this CLAUDE.md wins on implementation decisions made since (e.g. I build common/ myself, dwave.samplers instead of neal, Qiskit 2.x V2 primitives); agent-identity.md is background. Point out any conflict you notice.
@@ -78,6 +79,8 @@ domains/vrp/
 configs/vrp.yaml
 data/  results/  notebooks/
 docs/challenges.md  # TQ3 running log
+docs/report_vrp.md  # VRP section of the group report (for M3)
+README.md           # project entry point: results, deliverable map, conventions for M1/M3/M4
 tests/              # pytest; test_env.py checks installed versions == pins
 pyproject.toml      # pytest config only (pythonpath = repo root)
 requirements.txt    # pinned (from pip freeze)
@@ -129,7 +132,8 @@ probability of the optimal bitstring, probability of any feasible bitstring, run
 7. [x] Stage 2 route QUBO (`build_route_bqm`, `decode_route`, P = 102) and chaining in `domains/vrp/run.py` + `configs/vrp.yaml`; chain reaches 118.
 8. [x] QAOA study: `domains/vrp/sweep.py`, 67 runs in `results/sweep/` (summary.csv, figures); cost operator normalised in `run_qaoa`; findings in `domains/vrp/README.md`.
 8b. [x] Final chain run with p = 4 Powell (README "Final run"): QAOA p_optimal 0.052 / 0.177, chain cost 118.
-9. [ ] Report section for M3 and slides. (`docs/challenges.md` and the README derivation are kept up to date as we go.)
+9. [~] Report section `docs/report_vrp.md` and root `README.md` (audience: M1/M3/M4 adapt their work, professor grades) done;
+   slides still open. `docs/challenges.md` and the README derivation are kept up to date as we go.
 
 Next steps (after 9, optional): decide what of `results/sweep/` (6.7 MB) to commit; tell M1/M3/M4 about
 `decode(sample, instance)`; confirm QOPTLib data licence on Mendeley; optional TQ3 extras: multi-start QAOA,

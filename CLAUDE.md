@@ -74,8 +74,13 @@ domains/vrp/
   README.md       # formulation, derivation, parameters, how to reproduce
 configs/vrp.yaml
 data/  results/  notebooks/
-requirements.txt  # pinned (from pip freeze)
+docs/challenges.md  # TQ3 running log
+tests/              # pytest; test_env.py checks installed versions == pins
+pyproject.toml      # pytest config only (pythonpath = repo root)
+requirements.txt    # pinned (from pip freeze)
 ```
+Modules are added with their first real content (no empty stubs); empty dirs carry a `.gitkeep`.
+Local dev env: `.venv/` (CPython 3.14.3), git-ignored.
 
 ## problem.py interface (keep exactly)
 - `load_instance(path) -> Instance`

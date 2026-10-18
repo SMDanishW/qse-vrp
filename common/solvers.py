@@ -20,6 +20,9 @@ from scipy.optimize import minimize
 # Generic hardware gate set, used only to report the circuit depth a real device would need (TQ3).
 HARDWARE_BASIS = ["cx", "rz", "sx", "x"]
 
+# scipy option that caps the number of energy evaluations, per supported gradient-free optimizer.
+BUDGET_OPTION = {"COBYLA": "maxiter", "Nelder-Mead": "maxfev", "Powell": "maxfev"}
+
 
 def _sorted_rows(rows: Iterable[tuple[dict[str, int], int, float]]) -> list[dict]:
     return sorted(
@@ -42,17 +45,27 @@ def run_qaoa(
 ) -> dict:
     """QAOA with an explicit loop, so every step can be shown in the report.
 
-    1. QUBO -> Ising cost operator H_C (weighted Z and ZZ terms) plus a constant offset.
+    1. QUBO -> Ising cost operator H (weighted Z and ZZ terms) plus a constant offset, then
+       normalised: H_C = H / s with s = max |coefficient|, so gamma is O(1) whatever the penalty size
+       (physical angle = gamma / s). Without this, gamma must be ~1/s and COBYLA's unit first step
+       overshoots (docs/challenges.md).
     2. Ansatz: |+>^n, then `reps` layers of exp(-i gamma_k H_C) followed by the mixer exp(-i beta_k sum X).
-    3. scipy `optimizer` minimises <H_C> + offset (the expected QUBO energy) over (gammas, betas).
+    3. scipy `optimizer` minimises s <H_C> + offset (the expected QUBO energy) over (gammas, betas).
        Aer's EstimatorV2 returns the exact expectation (statevector); hardware would estimate it from shots.
+       `maxiter` is a budget of energy evaluations for every optimizer (maxfev for Nelder-Mead/Powell).
     4. The optimised circuit is sampled `shots` times; each bitstring is decoded by variable name
        (Qiskit bitstrings are little-endian: qubit i is character -1-i).
     """
     if len(initial_gammas) != reps or len(initial_betas) != reps:
         raise ValueError(f"need {reps} initial gammas and betas, got {initial_gammas}, {initial_betas}")
+    if optimizer not in BUDGET_OPTION:
+        raise ValueError(f"unsupported optimizer {optimizer!r}; choose from {sorted(BUDGET_OPTION)}")
     names = [v.name for v in qp.variables]
-    cost_op, offset = qp.to_ising()  # qubit i <-> qp variable i
+    ising, offset = qp.to_ising()  # qubit i <-> qp variable i
+    scale = float(np.abs(ising.coeffs).max())
+    if scale == 0:
+        raise ValueError("QUBO has no non-constant terms")
+    cost_op = ising * (1 / scale)
     backend = AerSimulator()
 
     logical = qaoa_ansatz(cost_op, reps=reps)
@@ -76,16 +89,16 @@ def run_qaoa(
     history: list[float] = []
 
     def expected_energy(x: np.ndarray) -> float:
-        e = float(estimator.run([(ansatz, observable, bind(x))]).result()[0].data.evs) + offset
+        e = scale * float(estimator.run([(ansatz, observable, bind(x))]).result()[0].data.evs) + offset
         history.append(e)
         return e
 
     start = time.perf_counter()
     opt = minimize(
         expected_energy,
-        np.array(initial_gammas + initial_betas, dtype=float),
+        np.array(list(initial_gammas) + list(initial_betas), dtype=float),
         method=optimizer,
-        options={"maxiter": maxiter},
+        options={BUDGET_OPTION[optimizer]: maxiter},
     )
     counts = (
         SamplerV2(seed=seed_simulator)
@@ -107,6 +120,7 @@ def run_qaoa(
         "reps": reps,
         "optimizer": optimizer,
         "maxiter": maxiter,
+        "cost_scale": scale,
         "initial_gammas": list(initial_gammas),
         "initial_betas": list(initial_betas),
         "optimal_gammas": opt.x[:reps].tolist(),

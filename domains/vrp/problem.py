@@ -147,3 +147,67 @@ def penalty_bound(instance: Instance) -> float:
     """
     c = instance.customers
     return float(max(sum(instance.dist[i][j] for j in c if j != i) for i in c))
+
+
+# ---------------------------------------------------------------- Stage 2: per-vehicle route (TSP)
+
+
+def y(i: int, t: int) -> str:
+    """Stage 2 variable name: customer i at visit position t."""
+    return f"y_{i}_{t}"
+
+
+def build_route_bqm(
+    instance: Instance, route: tuple[int, ...], penalties: dict[str, float]
+) -> dimod.BinaryQuadraticModel:
+    """Stage 2 TSP QUBO for one vehicle's customers; the depot is fixed at both ends, so m^2 variables.
+
+    E(y) = sum_i d_0i y_i0 + sum_t sum_{i!=j} d_ij y_it y_j(t+1) + sum_i d_i0 y_i(m-1)
+         + P_one_position * sum_i (sum_t y_it - 1)^2       (each customer visited once)
+         + P_one_customer * sum_t (sum_i y_it - 1)^2       (each position holds one customer)
+    """
+    m, d = len(route), instance.dist
+    bqm = dimod.BinaryQuadraticModel(dimod.BINARY)
+    for i in route:
+        bqm.add_linear(y(i, 0), d[0][i])
+        bqm.add_linear(y(i, m - 1), d[i][0])
+    for t in range(m - 1):
+        for i in route:
+            for j in route:
+                if i != j:
+                    bqm.add_quadratic(y(i, t), y(j, t + 1), d[i][j])
+    for i in route:
+        bqm.add_linear_equality_constraint([(y(i, t), 1) for t in range(m)], penalties["one_position"], -1)
+    for t in range(m):
+        bqm.add_linear_equality_constraint([(y(i, t), 1) for i in route], penalties["one_customer"], -1)
+    return bqm
+
+
+def build_route_qubo(
+    instance: Instance, route: tuple[int, ...], penalties: dict[str, float]
+) -> QuadraticProgram:
+    """Stage 2 TSP QUBO as a QuadraticProgram (same model as build_route_bqm)."""
+    return bqm_to_qp(build_route_bqm(instance, route, penalties))
+
+
+def decode_route(sample: dict[str, int], route: tuple[int, ...]) -> tuple[int, ...] | None:
+    """Visit order from a Stage 2 sample, by variable name.
+
+    None unless y is a permutation matrix (exactly one customer per position, each customer once).
+    """
+    order = []
+    for t in range(len(route)):
+        here = [i for i in route if sample[y(i, t)]]
+        if len(here) != 1:
+            return None
+        order.append(here[0])
+    return tuple(order) if len(set(order)) == len(route) else None
+
+
+def route_penalty_bound(instance: Instance) -> float:
+    """Twice the largest distance in the instance.
+
+    Flipping one y bit changes at most two legs (into and out of that position), each at most max d,
+    so a penalty above this makes every single-flip violation cost more than it saves, for any route.
+    """
+    return float(2 * max(max(row) for row in instance.dist))

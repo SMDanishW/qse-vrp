@@ -1,0 +1,44 @@
+# VRP (M2) run configuration: python -m domains.vrp.run --config configs/vrp.yaml
+# All seeds live here. Penalty justifications: domains/vrp/README.md.
+
+instance: data/vrp/P-n6_1.vrp
+n_vehicles: 2            # not in the .vrp file; every QOPTLib reference uses 2 routes (data/vrp/README.md)
+results_dir: results
+solvers: [qaoa, sa]      # each solver runs the full chain: Stage 1 -> Stage 2 per vehicle
+
+stage1:
+  penalties:
+    one_vehicle: 162     # penalty_bound: largest one-customer distance sum (customer 4: 51+43+21+47)
+    capacity: 162
+stage2:
+  penalties:
+    one_position: 102    # route_penalty_bound: 2 x max distance (51), valid for any route
+    one_customer: 102
+
+qaoa:
+  reps: 2                # p, number of QAOA layers
+  initial_gamma: 1.0     # same start for every layer; units of the normalised cost operator (max |coeff| = 1)
+  initial_beta: 0.4
+  optimizer: COBYLA      # COBYLA, Nelder-Mead or Powell
+  maxiter: 300           # energy-evaluation budget (maxfev for Nelder-Mead/Powell)
+  shots: 4096
+  seed_transpiler: 1
+  seed_simulator: 1
+
+sa:
+  num_reads: 1000
+  num_sweeps: 1000
+  seed: 1
+
+# Task 8 QAOA study: python -m domains.vrp.sweep --config configs/vrp.yaml
+# One factor at a time around the `qaoa` block above (shots and seeds also from there).
+# QUBOs: Stage 1 (8 qubits) and the 3-customer Stage 2 route of the Stage 1 optimum (9 qubits);
+# the 2-customer route (4 qubits) is too small to say anything.
+sweep:
+  results_dir: results/sweep
+  reps: [1, 2, 3, 4, 5]                    # x optimizers
+  optimizers: [COBYLA, Nelder-Mead, Powell]
+  maxiter: [25, 50, 100, 300, 1000]        # x optimizers
+  initial_gamma: [0.1, 0.4, 1.0, 2.0]
+  stage1_penalty: [40, 60, 100, 162, 250]  # 40 = smallest that passes the brute-force check
+  stage2_penalty: [60, 80, 102, 150]       # 60 = smallest that passes for every route

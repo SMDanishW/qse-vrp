@@ -73,6 +73,7 @@ common/
 domains/vrp/
   problem.py      # load_instance, build_qubo, decode, is_feasible, objective
   run.py          # CLI entry: python -m domains.vrp.run --config configs/vrp.yaml
+  sweep.py        # task 8 QAOA study: python -m domains.vrp.sweep --config configs/vrp.yaml
   README.md       # formulation, derivation, parameters, how to reproduce
 configs/vrp.yaml
 data/  results/  notebooks/
@@ -82,7 +83,7 @@ pyproject.toml      # pytest config only (pythonpath = repo root)
 requirements.txt    # pinned (from pip freeze)
 ```
 Modules are added with their first real content (no empty stubs); empty dirs carry a `.gitkeep`.
-Envs: M2 uses conda `qsenv314` (Python 3.14.8). `.venv/` (CPython 3.14.3) is a redundant local copy, git-ignored.
+Env: M2 uses conda `qsenv314` (Python 3.14.8) at `D:/anaconda/envs/qsenv314`.
 
 ## problem.py interface (keep exactly)
 - `load_instance(path) -> Instance`
@@ -125,8 +126,8 @@ probability of the optimal bitstring, probability of any feasible bitstring, run
 4. [x] Dataset: QOPTLib VRP, verdict "suitable with assumptions"; instance P-n6_1 (`data/vrp/README.md`).
 5. [x] Stage 1 QUBO: derivation in `domains/vrp/README.md`, `problem.py`, tests (8 vars, P = 162, ground state {1,2,5}/{3,4}).
 6. [x] `common/solvers.py` (`run_qaoa` hand-written loop, `run_sa`) and `common/results.py` (`distribution_stats`, `save_result`, `load_result`).
-7. [ ] Stage 2 TSP QUBO and Stage 1 → Stage 2 chaining.
-8. [ ] QAOA runs: sweep p, optimizer, maxiter; penalty sweep; full distributions.
+7. [x] Stage 2 route QUBO (`build_route_bqm`, `decode_route`, P = 102) and chaining in `domains/vrp/run.py` + `configs/vrp.yaml`; chain reaches 118.
+8. [x] QAOA study: `domains/vrp/sweep.py`, 67 runs in `results/sweep/` (summary.csv, figures); cost operator normalised in `run_qaoa`; findings in `domains/vrp/README.md`.
 9. [ ] `docs/challenges.md` for TQ3, README derivation, report section for M3, slides.
 
 Open items: none. M2 runs `qsenv314` (conda, Python 3.14.8); the old 3.12 `qsenv` is removed.

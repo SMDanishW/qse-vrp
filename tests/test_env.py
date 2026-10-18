@@ -16,7 +16,7 @@ def test_installed_versions_match_pins() -> None:
 
 def test_project_apis_importable() -> None:
     from dwave.samplers import SimulatedAnnealingSampler  # noqa: F401
-    from qiskit.circuit.library import QAOAAnsatz  # noqa: F401
+    from qiskit.circuit.library import qaoa_ansatz  # noqa: F401  (QAOAAnsatz class deprecated in 2.1)
     from qiskit_aer.primitives import EstimatorV2, SamplerV2  # noqa: F401
     from qiskit_optimization import QuadraticProgram
     from qiskit_optimization.converters import QuadraticProgramToQubo  # noqa: F401

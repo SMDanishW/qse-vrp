@@ -82,7 +82,7 @@ pyproject.toml      # pytest config only (pythonpath = repo root)
 requirements.txt    # pinned (from pip freeze)
 ```
 Modules are added with their first real content (no empty stubs); empty dirs carry a `.gitkeep`.
-Local dev env: `.venv/` (CPython 3.14.3), git-ignored.
+Envs: M2 uses conda `qsenv314` (Python 3.14.8). `.venv/` (CPython 3.14.3) is a redundant local copy, git-ignored.
 
 ## problem.py interface (keep exactly)
 - `load_instance(path) -> Instance`
@@ -124,12 +124,12 @@ probability of the optimal bitstring, probability of any feasible bitstring, run
 3. [x] `common/qubo_utils.py`: `verify_formulation` brute-force check, `bqm_to_qp` conversion (penalties: dimod built-in, no wrapper).
 4. [x] Dataset: QOPTLib VRP, verdict "suitable with assumptions"; instance P-n6_1 (`data/vrp/README.md`).
 5. [x] Stage 1 QUBO: derivation in `domains/vrp/README.md`, `problem.py`, tests (8 vars, P = 162, ground state {1,2,5}/{3,4}).
-6. [ ] `common/solvers.py` (`run_qaoa`, `run_sa`), then `common/results.py`.
+6. [x] `common/solvers.py` (`run_qaoa` hand-written loop, `run_sa`) and `common/results.py` (`distribution_stats`, `save_result`, `load_result`).
 7. [ ] Stage 2 TSP QUBO and Stage 1 → Stage 2 chaining.
 8. [ ] QAOA runs: sweep p, optimizer, maxiter; penalty sweep; full distributions.
 9. [ ] `docs/challenges.md` for TQ3, README derivation, report section for M3, slides.
 
-Open items: Python version of the user's `qsenv` env unknown (`.venv` here is 3.14.3).
+Open items: none. M2 runs `qsenv314` (conda, Python 3.14.8); the old 3.12 `qsenv` is removed.
 
 ## Environment
 - `requirements.txt` is the full pinned `pip freeze` (2026-10-18). It is the single source of truth;
@@ -138,9 +138,12 @@ Open items: Python version of the user's `qsenv` env unknown (`.venv` here is 3.
 - Key pins: qiskit 2.6.0, qiskit-aer 0.17.2, qiskit-optimization 0.7.0, dimod 0.12.22,
   dwave-samplers 1.8.0, numpy 2.5.4, scipy 1.18.1, PyYAML 6.0.3, matplotlib 3.11.2, pytest 9.1.1.
 - `docplex` is pulled in by qiskit-optimization (sdist only); not used directly.
+- Windows Smart App Control is ON (enforce) on M2's machine. It blocked dimod's cp312 `.pyd` in `qsenv`
+  (CodeIntegrity events 3033/3077, 2026-10-18); the cp314 wheels in `.venv` load and all tests pass.
 
 ## Commands
 ```
+conda activate qsenv314                              # M2's env (conda, Python 3.14); others may use a venv:
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python -m domains.vrp.run --config configs/vrp.yaml

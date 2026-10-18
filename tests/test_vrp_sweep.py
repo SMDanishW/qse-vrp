@@ -11,7 +11,7 @@ CFG = yaml.safe_load((Path(__file__).resolve().parents[1] / "configs/vrp.yaml").
 
 def test_baseline_runs_once_and_serves_every_experiment() -> None:
     runs = plan(CFG)
-    q = CFG["qaoa"]
+    q = CFG["qaoa"] | CFG["sweep"]["baseline"]
     for qubo in ("stage1", "stage2"):
         penalty = next(iter(CFG[qubo]["penalties"].values()))
         base = (qubo, (q["reps"], q["optimizer"], q["maxiter"], q["initial_gamma"], penalty))

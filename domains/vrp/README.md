@@ -215,3 +215,17 @@ Readings:
   range the landscape shape, not P, decides the result. The analytic bounds (162, 102) are kept.
 - Even the best runs leave most probability on wrong answers: Stage 1 70% infeasible shots
   (`fig_distribution_stage1.png`), route 40% (`fig_distribution_stage2.png`).
+
+## Final run (reported result)
+`configs/vrp.yaml` after task 8: QAOA p = 4, Powell, budget 300, initial γ = 1.0, β = 0.4, 4096 shots,
+seeds 1; simulated annealing 1000 reads × 1000 sweeps, seed 1. Penalties 162 (Stage 1) and 102 (Stage 2).
+The sweep keeps its own baseline (`sweep.baseline`: p = 2, COBYLA) so `results/sweep/` stays reproducible.
+
+| QUBO | Qubits | QAOA p_optimal / p_feasible | CNOTs (generic hardware) | SA p_optimal / p_feasible |
+|---|---|---|---|---|
+| Stage 1 assignment | 8 | 0.052 / 0.296 | 128 | 0.507 / 0.992 |
+| Route {1, 2, 5} | 9 | 0.177 / 0.582 | 240 | 0.395 / 1.000 |
+| Route {3, 4} | 4 | 0.828 / 0.828 | 48 | 1.000 / 1.000 |
+
+Both chains return routes 0-1-5-2-0 and 0-4-3-0 (or reversed), total cost 118 (`results/vrp_chain_*_20261018T0956*.json`).
+The earlier p = 2 COBYLA run without cost normalisation (`results/*T0935*.json`) is kept as the "before" baseline.

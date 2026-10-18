@@ -1,0 +1,214 @@
+{
+  "domain": "vrp",
+  "instance": "data/vrp/P-n6_1.vrp",
+  "n_vars": 9,
+  "stage": "stage2",
+  "vehicle": 0,
+  "route": [
+    1,
+    2,
+    5
+  ],
+  "route_tag": "_v0",
+  "penalties": {
+    "one_position": 102,
+    "one_customer": 102
+  },
+  "solver": "simulated_annealing",
+  "backend": "dwave-samplers SimulatedAnnealingSampler (neal)",
+  "num_reads": 1000,
+  "num_sweeps": 1000,
+  "seeds": {
+    "annealer": 1
+  },
+  "distribution": [
+    {
+      "sample": {
+        "y_1_0": 0,
+        "y_1_1": 0,
+        "y_1_2": 1,
+        "y_2_0": 1,
+        "y_2_1": 0,
+        "y_2_2": 0,
+        "y_5_0": 0,
+        "y_5_1": 1,
+        "y_5_2": 0
+      },
+      "count": 214,
+      "energy": 45.0,
+      "feasible": true
+    },
+    {
+      "sample": {
+        "y_1_0": 1,
+        "y_1_1": 0,
+        "y_1_2": 0,
+        "y_2_0": 0,
+        "y_2_1": 0,
+        "y_2_2": 1,
+        "y_5_0": 0,
+        "y_5_1": 1,
+        "y_5_2": 0
+      },
+      "count": 181,
+      "energy": 45.0,
+      "feasible": true
+    },
+    {
+      "sample": {
+        "y_1_0": 0,
+        "y_1_1": 1,
+        "y_1_2": 0,
+        "y_2_0": 0,
+        "y_2_1": 0,
+        "y_2_2": 1,
+        "y_5_0": 1,
+        "y_5_1": 0,
+        "y_5_2": 0
+      },
+      "count": 175,
+      "energy": 49.0,
+      "feasible": true
+    },
+    {
+      "sample": {
+        "y_1_0": 0,
+        "y_1_1": 1,
+        "y_1_2": 0,
+        "y_2_0": 1,
+        "y_2_1": 0,
+        "y_2_2": 0,
+        "y_5_0": 0,
+        "y_5_1": 0,
+        "y_5_2": 1
+      },
+      "count": 152,
+      "energy": 49.0,
+      "feasible": true
+    },
+    {
+      "sample": {
+        "y_1_0": 1,
+        "y_1_1": 0,
+        "y_1_2": 0,
+        "y_2_0": 0,
+        "y_2_1": 1,
+        "y_2_2": 0,
+        "y_5_0": 0,
+        "y_5_1": 0,
+        "y_5_2": 1
+      },
+      "count": 144,
+      "energy": 54.0,
+      "feasible": true
+    },
+    {
+      "sample": {
+        "y_1_0": 0,
+        "y_1_1": 0,
+        "y_1_2": 1,
+        "y_2_0": 0,
+        "y_2_1": 1,
+        "y_2_2": 0,
+        "y_5_0": 1,
+        "y_5_1": 0,
+        "y_5_2": 0
+      },
+      "count": 134,
+      "energy": 54.0,
+      "feasible": true
+    }
+  ],
+  "runtime_s": 0.11257850000401959,
+  "formulation_check": {
+    "n_vars": 9,
+    "n_states": 512,
+    "n_feasible": 6,
+    "ground_energy": 45.0,
+    "ground_states": [
+      {
+        "y_1_0": 1,
+        "y_1_1": 0,
+        "y_1_2": 0,
+        "y_2_0": 0,
+        "y_2_1": 0,
+        "y_2_2": 1,
+        "y_5_0": 0,
+        "y_5_1": 1,
+        "y_5_2": 0
+      },
+      {
+        "y_1_0": 0,
+        "y_1_1": 0,
+        "y_1_2": 1,
+        "y_2_0": 1,
+        "y_2_1": 0,
+        "y_2_2": 0,
+        "y_5_0": 0,
+        "y_5_1": 1,
+        "y_5_2": 0
+      }
+    ],
+    "best_feasible_energy": 45.0,
+    "best_infeasible_energy": 220.0,
+    "gap": 175.0
+  },
+  "stats": {
+    "total_samples": 1000,
+    "n_distinct": 6,
+    "best_sample": {
+      "y_1_0": 0,
+      "y_1_1": 0,
+      "y_1_2": 1,
+      "y_2_0": 1,
+      "y_2_1": 0,
+      "y_2_2": 0,
+      "y_5_0": 0,
+      "y_5_1": 1,
+      "y_5_2": 0
+    },
+    "best_energy": 45.0,
+    "best_feasible": true,
+    "most_likely_sample": {
+      "y_1_0": 0,
+      "y_1_1": 0,
+      "y_1_2": 1,
+      "y_2_0": 1,
+      "y_2_1": 0,
+      "y_2_2": 0,
+      "y_5_0": 0,
+      "y_5_1": 1,
+      "y_5_2": 0
+    },
+    "most_likely_probability": 0.214,
+    "p_optimal": 0.395,
+    "p_feasible": 1.0
+  },
+  "best_feasible": {
+    "sample": {
+      "y_1_0": 0,
+      "y_1_1": 0,
+      "y_1_2": 1,
+      "y_2_0": 1,
+      "y_2_1": 0,
+      "y_2_2": 0,
+      "y_5_0": 0,
+      "y_5_1": 1,
+      "y_5_2": 0
+    },
+    "count": 214,
+    "energy": 45.0,
+    "feasible": true
+  },
+  "timestamp_utc": "2026-10-18T09:56:58.742246+00:00",
+  "python": "3.14.8",
+  "package_versions": {
+    "qiskit": "2.6.0",
+    "qiskit-aer": "0.17.2",
+    "qiskit-optimization": "0.7.0",
+    "dimod": "0.12.22",
+    "dwave-samplers": "1.8.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  }
+}

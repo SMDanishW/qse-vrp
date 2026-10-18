@@ -1,6 +1,6 @@
 """Task 8 QAOA study on the VRP QUBOs: python -m domains.vrp.sweep --config configs/vrp.yaml [--plot-only]
 
-One factor at a time around cfg["qaoa"]: reps x optimizer, budget x optimizer, initial gamma, penalty.
+One factor at a time around cfg["sweep"]["baseline"]: reps x optimizer, budget x optimizer, initial gamma, penalty.
 QUBOs: Stage 1 (8 qubits) and the 3-customer Stage 2 route of the Stage 1 optimum (9 qubits).
 Every run is saved as JSON with its full distribution; summary.csv and figures go to sweep.results_dir.
 """
@@ -54,7 +54,8 @@ def build_qubos(cfg: dict) -> dict[str, Callable[[float], tuple[dimod.BinaryQuad
 
 def plan(cfg: dict) -> dict[tuple[str, tuple], set[str]]:
     """(qubo, settings) -> experiments that need it; shared baseline points run once."""
-    q, sw = cfg["qaoa"], cfg["sweep"]
+    sw = cfg["sweep"]
+    q = cfg["qaoa"] | sw["baseline"]
     runs: dict[tuple[str, tuple], set[str]] = {}
     for qubo, penalties in (("stage1", sw["stage1_penalty"]), ("stage2", sw["stage2_penalty"])):
         base = {

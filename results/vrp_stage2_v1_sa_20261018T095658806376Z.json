@@ -1,0 +1,114 @@
+{
+  "domain": "vrp",
+  "instance": "data/vrp/P-n6_1.vrp",
+  "n_vars": 4,
+  "stage": "stage2",
+  "vehicle": 1,
+  "route": [
+    3,
+    4
+  ],
+  "route_tag": "_v1",
+  "penalties": {
+    "one_position": 102,
+    "one_customer": 102
+  },
+  "solver": "simulated_annealing",
+  "backend": "dwave-samplers SimulatedAnnealingSampler (neal)",
+  "num_reads": 1000,
+  "num_sweeps": 1000,
+  "seeds": {
+    "annealer": 1
+  },
+  "distribution": [
+    {
+      "sample": {
+        "y_3_0": 0,
+        "y_3_1": 1,
+        "y_4_0": 1,
+        "y_4_1": 0
+      },
+      "count": 501,
+      "energy": 73.0,
+      "feasible": true
+    },
+    {
+      "sample": {
+        "y_3_0": 1,
+        "y_3_1": 0,
+        "y_4_0": 0,
+        "y_4_1": 1
+      },
+      "count": 499,
+      "energy": 73.0,
+      "feasible": true
+    }
+  ],
+  "runtime_s": 0.05431819998193532,
+  "formulation_check": {
+    "n_vars": 4,
+    "n_states": 16,
+    "n_feasible": 2,
+    "ground_energy": 73.0,
+    "ground_states": [
+      {
+        "y_3_0": 0,
+        "y_3_1": 1,
+        "y_4_0": 1,
+        "y_4_1": 0
+      },
+      {
+        "y_3_0": 1,
+        "y_3_1": 0,
+        "y_4_0": 0,
+        "y_4_1": 1
+      }
+    ],
+    "best_feasible_energy": 73.0,
+    "best_infeasible_energy": 222.0,
+    "gap": 149.0
+  },
+  "stats": {
+    "total_samples": 1000,
+    "n_distinct": 2,
+    "best_sample": {
+      "y_3_0": 0,
+      "y_3_1": 1,
+      "y_4_0": 1,
+      "y_4_1": 0
+    },
+    "best_energy": 73.0,
+    "best_feasible": true,
+    "most_likely_sample": {
+      "y_3_0": 0,
+      "y_3_1": 1,
+      "y_4_0": 1,
+      "y_4_1": 0
+    },
+    "most_likely_probability": 0.501,
+    "p_optimal": 1.0,
+    "p_feasible": 1.0
+  },
+  "best_feasible": {
+    "sample": {
+      "y_3_0": 0,
+      "y_3_1": 1,
+      "y_4_0": 1,
+      "y_4_1": 0
+    },
+    "count": 501,
+    "energy": 73.0,
+    "feasible": true
+  },
+  "timestamp_utc": "2026-10-18T09:56:58.806376+00:00",
+  "python": "3.14.8",
+  "package_versions": {
+    "qiskit": "2.6.0",
+    "qiskit-aer": "0.17.2",
+    "qiskit-optimization": "0.7.0",
+    "dimod": "0.12.22",
+    "dwave-samplers": "1.8.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  }
+}

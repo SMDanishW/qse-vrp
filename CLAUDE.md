@@ -128,7 +128,12 @@ probability of the optimal bitstring, probability of any feasible bitstring, run
 6. [x] `common/solvers.py` (`run_qaoa` hand-written loop, `run_sa`) and `common/results.py` (`distribution_stats`, `save_result`, `load_result`).
 7. [x] Stage 2 route QUBO (`build_route_bqm`, `decode_route`, P = 102) and chaining in `domains/vrp/run.py` + `configs/vrp.yaml`; chain reaches 118.
 8. [x] QAOA study: `domains/vrp/sweep.py`, 67 runs in `results/sweep/` (summary.csv, figures); cost operator normalised in `run_qaoa`; findings in `domains/vrp/README.md`.
-9. [ ] `docs/challenges.md` for TQ3, README derivation, report section for M3, slides.
+8b. [x] Final chain run with p = 4 Powell (README "Final run"): QAOA p_optimal 0.052 / 0.177, chain cost 118.
+9. [ ] Report section for M3 and slides. (`docs/challenges.md` and the README derivation are kept up to date as we go.)
+
+Next steps (after 9, optional): decide what of `results/sweep/` (6.7 MB) to commit; tell M1/M3/M4 about
+`decode(sample, instance)`; confirm QOPTLib data licence on Mendeley; optional TQ3 extras: multi-start QAOA,
+annealing-schedule sweep, monolithic VRP QUBO with simulated annealing only.
 
 Open items: none. M2 runs `qsenv314` (conda, Python 3.14.8); the old 3.12 `qsenv` is removed.
 

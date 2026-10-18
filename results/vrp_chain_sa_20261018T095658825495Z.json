@@ -1,0 +1,51 @@
+{
+  "domain": "vrp",
+  "stage": "chain",
+  "instance": "data/vrp/P-n6_1.vrp",
+  "solver": "sa",
+  "clusters": [
+    [
+      1,
+      2,
+      5
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "routes": [
+    [
+      0,
+      2,
+      5,
+      1,
+      0
+    ],
+    [
+      0,
+      4,
+      3,
+      0
+    ]
+  ],
+  "objective": 118.0,
+  "feasible": true,
+  "stage1_result": "results\\vrp_stage1_sa_20261018T095658610582Z.json",
+  "stage2_results": [
+    "results\\vrp_stage2_v0_sa_20261018T095658742246Z.json",
+    "results\\vrp_stage2_v1_sa_20261018T095658806376Z.json"
+  ],
+  "cluster_cost": 53.0,
+  "timestamp_utc": "2026-10-18T09:56:58.825495+00:00",
+  "python": "3.14.8",
+  "package_versions": {
+    "qiskit": "2.6.0",
+    "qiskit-aer": "0.17.2",
+    "qiskit-optimization": "0.7.0",
+    "dimod": "0.12.22",
+    "dwave-samplers": "1.8.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  }
+}

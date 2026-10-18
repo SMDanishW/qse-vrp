@@ -16,10 +16,10 @@ stage2:
     one_customer: 102
 
 qaoa:
-  reps: 2                # p, number of QAOA layers
+  reps: 4                # p, number of QAOA layers (task 8: best on both QUBOs, README 'QAOA study')
   initial_gamma: 1.0     # same start for every layer; units of the normalised cost operator (max |coeff| = 1)
   initial_beta: 0.4
-  optimizer: COBYLA      # COBYLA, Nelder-Mead or Powell
+  optimizer: Powell      # COBYLA, Nelder-Mead or Powell (task 8: Powell best on Stage 1, ties COBYLA on routes)
   maxiter: 300           # energy-evaluation budget (maxfev for Nelder-Mead/Powell)
   shots: 4096
   seed_transpiler: 1
@@ -31,11 +31,13 @@ sa:
   seed: 1
 
 # Task 8 QAOA study: python -m domains.vrp.sweep --config configs/vrp.yaml
-# One factor at a time around the `qaoa` block above (shots and seeds also from there).
+# One factor at a time around `sweep.baseline` (the settings the 67-run study used);
+# shots, initial_beta and seeds come from the `qaoa` block.
 # QUBOs: Stage 1 (8 qubits) and the 3-customer Stage 2 route of the Stage 1 optimum (9 qubits);
 # the 2-customer route (4 qubits) is too small to say anything.
 sweep:
   results_dir: results/sweep
+  baseline: {reps: 2, optimizer: COBYLA, maxiter: 300, initial_gamma: 1.0}
   reps: [1, 2, 3, 4, 5]                    # x optimizers
   optimizers: [COBYLA, Nelder-Mead, Powell]
   maxiter: [25, 50, 100, 300, 1000]        # x optimizers

@@ -1,0 +1,13 @@
+# environments
+.venv/
+qsenv/
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# course material (copyrighted; brief contains real names)
+slides/
+Project instructions/

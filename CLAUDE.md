@@ -77,7 +77,8 @@ domains/vrp/
   sweep.py        # task 8 QAOA study: python -m domains.vrp.sweep --config configs/vrp.yaml
   README.md       # formulation, derivation, parameters, how to reproduce
 configs/vrp.yaml
-data/  results/  notebooks/
+data/  results/
+notebooks/          # 00–07 walk-throughs, one per implementation, with assert self-checks (need ipykernel)
 docs/challenges.md  # TQ3 running log
 docs/report_vrp.md  # VRP section of the group report (for M3)
 README.md           # project entry point: results, deliverable map, conventions for M1/M3/M4
@@ -132,8 +133,9 @@ probability of the optimal bitstring, probability of any feasible bitstring, run
 7. [x] Stage 2 route QUBO (`build_route_bqm`, `decode_route`, P = 102) and chaining in `domains/vrp/run.py` + `configs/vrp.yaml`; chain reaches 118.
 8. [x] QAOA study: `domains/vrp/sweep.py`, 67 runs in `results/sweep/` (summary.csv, figures); cost operator normalised in `run_qaoa`; findings in `domains/vrp/README.md`.
 8b. [x] Final chain run with p = 4 Powell (README "Final run"): QAOA p_optimal 0.052 / 0.177, chain cost 118.
-9. [~] Report section `docs/report_vrp.md` and root `README.md` (audience: M1/M3/M4 adapt their work, professor grades) done;
-   slides still open. `docs/challenges.md` and the README derivation are kept up to date as we go.
+9. [x] Report section `docs/report_vrp.md`, root `README.md` (audience: M1/M3/M4 adapt their work, professor grades),
+   and a 13-slide VRP deck with speaker notes: https://claude.ai/artifact/AhrVhE6XWQPm31VvqZcCKi (private until shared;
+   exports to PPTX/PDF). `docs/challenges.md` and the README derivation are kept up to date as we go.
 
 Next steps (after 9, optional): decide what of `results/sweep/` (6.7 MB) to commit; tell M1/M3/M4 about
 `decode(sample, instance)`; confirm QOPTLib data licence on Mendeley; optional TQ3 extras: multi-start QAOA,
@@ -150,6 +152,7 @@ Open items: none. M2 runs `qsenv314` (conda, Python 3.14.8); the old 3.12 `qsenv
 - `docplex` is pulled in by qiskit-optimization (sdist only); not used directly.
 - Windows Smart App Control is ON (enforce) on M2's machine. It blocked dimod's cp312 `.pyd` in `qsenv`
   (CodeIntegrity events 3033/3077, 2026-10-18); the cp314 wheels in `.venv` load and all tests pass.
+  2026-10-19: one transient block of numpy's cp314 `_mt19937.pyd` in `qsenv314`; an immediate retry loaded it.
 
 ## Commands
 ```

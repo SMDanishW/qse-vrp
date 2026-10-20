@@ -29,6 +29,7 @@ single largest improvement. Full write-up: [docs/report_vrp.md](docs/report_vrp.
 | QAOA / annealing parameter documentation | [configs/vrp.yaml](configs/vrp.yaml) (all settings and seeds, with reasons), report §4.3 |
 | Practical challenges (TQ3) | report §6, running log [docs/challenges.md](docs/challenges.md) |
 | Reproducible structure | this README, `tests/`, pinned [requirements.txt](requirements.txt) |
+| Walk-through of each implementation | [notebooks/](notebooks/) (start with `00_overview.ipynb`) |
 
 ## Quick start
 Python 3.12–3.14 (developed on 3.14.8, Windows 11, CPU only). No quantum hardware or IBM account needed.
@@ -61,6 +62,7 @@ configs/vrp.yaml        every run setting and seed
 data/vrp/               QOPTLib VRP instances + dataset README
 results/                run outputs (one JSON per solver run, chain summaries, sweep/)
 docs/                   report_vrp.md (report section), challenges.md (TQ3 log)
+notebooks/              00–07: one notebook per implementation step (what, why, resources, expected results, self-checks)
 tests/                  pytest suite
 ```
 
